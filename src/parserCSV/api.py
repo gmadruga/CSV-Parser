@@ -8,6 +8,6 @@ class ParserAPI:
     def run(self):
         for file in self.filesToParse:
             parser = ParserFactory(file).getConstructor()
-            parser.parse()
-            b = 0
+            if parser is not None:
+                parser.parse()
 
