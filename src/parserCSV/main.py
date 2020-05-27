@@ -23,4 +23,4 @@ for file in filepath.iterdir():
         print('NOVO ARQUIVO PARA SER PARSEADO: '+file.name)
         filesToParse.append(file.absolute())
 
-api = ParserAPI(filesToParse).run()
+api = ParserAPI(filesToParse).runAll()

@@ -6,8 +6,9 @@ from src.parserCSV.abstract import AbstractPaser
 
 
 class UnisegurosDCM(AbstractPaser):
-    def __init__(self,file,enc):
-        super().__init__(file,enc)
+    def __init__(self,file,enc,csvSeparator=r';'):
+        #       COLOCAR AQUI O SEPARADOR DESSE ARQUIVO
+        super().__init__(file,enc,csvSeparator)
 
     def checkDocumento(self):
         try:
@@ -30,7 +31,7 @@ class UnisegurosDCM(AbstractPaser):
     def __read_csv(self):
         #               INICIALIZACAO DATAFRAME(S)
         #   CONTEUDO
-        self.df = pd.read_csv(self.file, sep=r';',
+        self.df = pd.read_csv(self.file, sep=self.csvSeparator,
                               engine='python',
                               encoding=self.enc,
                               warn_bad_lines=False,
