@@ -31,6 +31,9 @@ class ParserResult:
     def setTipoDocumento(self,tipoDocumento):
         self.tipoDocumento = tipoDocumento
 
+    def sethHash(self,hash):
+        self.hash = hash
+
 class ParserConfig:
     def __init__(self,file=None,enc='',csvSeparator=r';'):
         self.file = file

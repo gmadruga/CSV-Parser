@@ -4,6 +4,10 @@ import random
 import string
 import sys
 import time
+import base64
+import hashlib
+import re
+import unicodedata
 from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
@@ -40,7 +44,7 @@ class AbstractPaser:
             self.parseDocument()
             if not self.outPutCsvFilePath.exists():
                 self.outPutCsvFilePath.mkdir()
-            self.final_df.to_csv(self.outPutFileName,index=True, sep=self.csvSeparator)
+            self.saveAndGetHash(self.final_df)
             self.result.setParserHealth(True)
             print('Arquivo parseado com sucesso!!')
             result = self.result.getParserResult()
@@ -52,3 +56,19 @@ class AbstractPaser:
             print(str(result))
             return result
 
+    def saveAndGetHash(self,finalDataframe):
+        buffer = StringIO()
+        finalDataframe.to_csv(buffer,index=True, sep=self.csvSeparator)
+        self.result.sethHash(self.getHash(buffer=buffer.getvalue(),hash_function='sha256'))
+        self.outPutFileName.write_text(data=buffer.getvalue(),encoding=self.enc)
+        buffer.close()
+
+    def getHash(self,buffer,hash_function='sha1'):
+        if hash_function == 'sha1':
+            h = hashlib.sha1()
+        else:
+            h = hashlib.sha256()
+        h.update(buffer.encode(encoding='utf-8'))
+        hash_str = base64.b64encode(h.digest()).decode('utf-8')
+
+        return hash_str
