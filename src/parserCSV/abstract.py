@@ -37,6 +37,7 @@ class AbstractPaser:
 
     def parse(self):
         #           CRIA DIRETORIO E ARQUIVO DE SAIDA
+        timeStart = time.time()
         self.outPutCsvFilePath = Path(str(self.file.parent)+'\\'+str(self.file.stem))
         self.outPutFileName = Path(str(self.file.parent)+'\\'+str(self.file.stem)+'\\'+str(self.file.stem)+'.csv')
         print('Iniciando arquivo no diretorio de saida ' + str(self.outPutCsvFilePath))
@@ -46,6 +47,7 @@ class AbstractPaser:
                 self.outPutCsvFilePath.mkdir()
             self.saveAndGetHash(self.final_df)
             self.result.setParserHealth(True)
+            self.result.setElapsedTime(timeStart)
             print('Arquivo parseado com sucesso!!')
             result = self.result.getParserResult()
             print(str(result))
@@ -72,3 +74,4 @@ class AbstractPaser:
         hash_str = base64.b64encode(h.digest()).decode('utf-8')
 
         return hash_str
+

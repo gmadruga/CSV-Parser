@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import time
 
 
 class ParserResult:
@@ -33,6 +34,11 @@ class ParserResult:
 
     def sethHash(self,hash):
         self.hash = hash
+
+    def setElapsedTime(self,timeStart):
+        timeFinish = time.time()
+        self.elapsedTime = timeFinish - timeStart
+
 
 class ParserConfig:
     def __init__(self,file=None,enc='',csvSeparator=r';'):
