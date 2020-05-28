@@ -6,17 +6,17 @@ from enum import Enum, auto
 
 class ParserResult:
 
-    def __init__(self,config,tipoDocumento=None):
+    def __init__(self,config,tipoDocumento=None,message=None,status=None):
         self.enc = config.getParserConfig()["encoding"]
         self.csvSeparator = config.getParserConfig()["csvSeparator"]
         self.file = Path(config.getParserConfig()["originFilePath"])
         self.config = config.getConfigJson()
         self.hash = ''
         self.health = False
-        self.message = None
+        self.message = message
         self.elapsedTime = 0
         self.result = None
-        self.status = None
+        self.status = status
         self.tipoDocumento = tipoDocumento
 
     def getParserResult(self):
@@ -42,7 +42,7 @@ class ParserResult:
         self.elapsedTime = timeFinish - timeStart
 
     def setStatus(self, status):
-        self.status = status
+        self.status = status.name
 
 class ParserConfig:
     def __init__(self,file=None,enc='',csvSeparator=r';'):
@@ -104,3 +104,12 @@ class ParserStatus(Enum):
     SCHEMA_TISS_DESCONHECIDO = auto()
     VERSAO_TISS_DESCONHECIDA = auto()
     ERROR_IDENTIFYING_OPERATOR = auto()
+
+
+#                       EXCEPTIONS CUSTOMIZADAS
+
+class EmptyDocumentException(Exception):
+    pass
+
+class TipoDocumentoNaoIdentificadoException(Exception):
+    pass

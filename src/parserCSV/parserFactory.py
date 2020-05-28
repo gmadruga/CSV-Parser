@@ -1,5 +1,5 @@
 from src.parsers.dcm.uniseguros import UnisegurosDCM
-from src.utils import ParserConfig
+from src.utils import ParserConfig, EmptyDocumentException, TipoDocumentoNaoIdentificadoException
 import src.parsers.dp
 import src.parsers.erp
 import src.parsers.rrg
@@ -20,5 +20,10 @@ class ParserFactory:
                 bol = parser.checkDocumento()
                 if bol:
                     return parser
-
-        print('Operadora nao encontrada para '+self.file.name)
+        print('Operadora nao encontrada para ' + self.file.name)
+    ##      VERIFICANDO SE ARQUIVO ESTA VAZIO
+        string = self.file.read_text()
+        if not string:
+            raise EmptyDocumentException('Documento vazio')
+        else:
+            raise TipoDocumentoNaoIdentificadoException('Erro ao identificar operadora')

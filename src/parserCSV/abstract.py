@@ -49,16 +49,16 @@ class AbstractPaser:
             #       SETTANDO O PARSER RESULT
             self.result.setParserHealth(True)
             self.result.setElapsedTime(timeStart)
-            self.result.setStatus(ParserStatus.PARSED.name)
+            self.result.setStatus(ParserStatus.PARSED)
             #-----------------------------------#
             print('Arquivo parseado com sucesso!!')
             result = self.result.getParserResult()
-            print(str(result))
             return result
         except Exception as e:
+            #           ERRO GENERICO
             self.result.setMessage(str(e))
+            self.result.setStatus(ParserStatus.ERROR)
             result = self.result.getParserResult()
-            print(str(result))
             return result
 
     def saveAndGetHash(self,finalDataframe):
