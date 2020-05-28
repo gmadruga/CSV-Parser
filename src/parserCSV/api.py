@@ -1,5 +1,5 @@
 from src.parserCSV.parserFactory import ParserFactory
-import json
+from src.parserCSV.abstract import ParserResult, ParserConfig
 
 class ParserAPI:
 
@@ -10,16 +10,17 @@ class ParserAPI:
         try:
             parser = ParserFactory(file).getConstructor()
             if parser is not None:
-                result = parser.parse()
-                return result
+                return parser.parse()
         except Exception as e:
             print(e)
-
+            config= ParserConfig(file=file)
+            return ParserResult(config=config)
 
     def runAll(self):
         parserResults = []
         for file in self.filesToParse:
             parserResults.append(self.run((file)))
+        return parserResults
 
 
 

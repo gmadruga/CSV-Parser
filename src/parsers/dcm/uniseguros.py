@@ -1,14 +1,18 @@
 from io import StringIO
 
 import pandas as pd
+from src.utils import TipoDocumento
 
 from src.parserCSV.abstract import AbstractPaser
 
 
 class UnisegurosDCM(AbstractPaser):
-    def __init__(self,file,enc,csvSeparator=r';'):
-        #       COLOCAR AQUI O SEPARADOR DESSE ARQUIVO
-        super().__init__(file,enc,csvSeparator)
+    def __init__(self,config):
+        #  COLOCAR AQUI O SEPARADOR DESSE ARQUIVO
+        # ---------------------------------------#
+        config.setCsvSeparator(csvSeparator=r';')
+        #---------------------------------------#
+        super().__init__(config)
 
     def checkDocumento(self):
         try:
@@ -21,7 +25,7 @@ class UnisegurosDCM(AbstractPaser):
             return False
 
     def getTipoDocumento(self):
-        self.tipoDocumento = ('DEMONSTRATIVO_ANALISE_CONTA','000701','.csv/.txt/.tsv')
+        return TipoDocumento(("DEMONSTRATIVO_ANALISE_CONTA","000701",".csv/.txt/.tsv"))
 
     def parseDocument(self):
         self.__read_csv()

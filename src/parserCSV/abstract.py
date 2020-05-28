@@ -8,28 +8,27 @@ from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
 import pandas as pd
+from src.utils import ParserResult, ParserConfig, TipoDocumento
 import json
 
 class AbstractPaser:
-    def __init__(self,file,enc,csvSeparator):
-        #       INICIALIZANDO OS ATRIBUTOS
-        self.csvSeparator = csvSeparator
-        self.file = file
-        self.enc = enc
-        self.config = json.dumps({"csvSeparator": self.csvSeparator,"originFilePath":str(self.file),"encoding":self.enc})
+    def __init__(self,config):
+        self.enc = config.getParserConfig()["encoding"]
+        self.csvSeparator = config.getParserConfig()["csvSeparator"]
+        self.file = Path(config.getParserConfig()["originFilePath"])
+        self.config = config.getConfigJson()
         self.outPutCsvFilePath = None
-        self.hash = ''
-        self.tipoDocumento = None
+        self.tipoDocumento = self.getTipoDocumento()
         self.final_df = None
-        self.result = None
-        self.health = False
-        self.message = None
-        self.elapsedTime = 0
+        self.result = ParserResult(config,tipoDocumento=self.tipoDocumento.getTipoDocumento())
 
     def checkDocumento(self):
         pass
 
     def finalizeDF(self):
+        pass
+
+    def getTipoDocumento(self):
         pass
 
     def parse(self):
@@ -42,24 +41,14 @@ class AbstractPaser:
             if not self.outPutCsvFilePath.exists():
                 self.outPutCsvFilePath.mkdir()
             self.final_df.to_csv(self.outPutFileName,index=True, sep=self.csvSeparator)
-            self.getTipoDocumento()
-            self.setParserHealth(True)
+            self.result.setParserHealth(True)
             print('Arquivo parseado com sucesso!!')
-            self.getParserResult()
-            print(self.result)
-            return self.result
+            result = self.result.getParserResult()
+            print(str(result))
+            return result
         except Exception as e:
-            print('Erro ao parsear documento: '+e)
-            self.setMessage(e)
-            return self.getParserResult()
+            self.result.setMessage(str(e))
+            result = self.result.getParserResult()
+            print(str(result))
+            return result
 
-
-    def getParserResult(self):
-        self.result= json.dumps({"tipoDocumento":self.tipoDocumento,"health":self.health,"message":self.message,
-                                 "config":self.config,"hash":self.hash,"status":"","elapsedTime":self.elapsedTime})
-
-    def setParserHealth(self,bol):
-        self.health = bol
-
-    def setMessage(self,e):
-        self.message = e

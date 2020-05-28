@@ -8,7 +8,7 @@ from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
 from src.parserCSV.api import ParserAPI
-
+from src.utils import ParserConfig,ParserResult
 import pandas as pd
 
 #
@@ -23,4 +23,9 @@ for file in filepath.iterdir():
         print('NOVO ARQUIVO PARA SER PARSEADO: '+file.name)
         filesToParse.append(file.absolute())
 
-api = ParserAPI(filesToParse).runAll()
+if len(filesToParse)>0:
+    parserResults = ParserAPI(filesToParse).runAll()
+else:
+    print('NÃO HÁ ARQUIVOS A SEREM PARSEADOS!!')
+    parserResults = None
+

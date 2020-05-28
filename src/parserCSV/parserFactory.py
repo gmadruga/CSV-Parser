@@ -1,4 +1,5 @@
 from src.parsers.dcm.uniseguros import UnisegurosDCM
+from src.utils import ParserConfig
 import src.parsers.dp
 import src.parsers.erp
 import src.parsers.rrg
@@ -15,7 +16,7 @@ class ParserFactory:
         bol = False
         for enc in self.acceptedEncodings:
             for p in self.Parsers:
-                parser = self.Parsers[p](self.file,enc)
+                parser = self.Parsers[p](ParserConfig(file=self.file,enc=enc))
                 bol = parser.checkDocumento()
                 if bol:
                     return parser
