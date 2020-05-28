@@ -12,7 +12,7 @@ from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
 import pandas as pd
-from src.utils import ParserResult, ParserConfig, TipoDocumento
+from src.utils import ParserResult, ParserConfig, TipoDocumento,ParserStatus
 import json
 
 class AbstractPaser:
@@ -46,8 +46,11 @@ class AbstractPaser:
             if not self.outPutCsvFilePath.exists():
                 self.outPutCsvFilePath.mkdir()
             self.saveAndGetHash(self.final_df)
+            #       SETTANDO O PARSER RESULT
             self.result.setParserHealth(True)
             self.result.setElapsedTime(timeStart)
+            self.result.setStatus(ParserStatus.PARSED.name)
+            #-----------------------------------#
             print('Arquivo parseado com sucesso!!')
             result = self.result.getParserResult()
             print(str(result))

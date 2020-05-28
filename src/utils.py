@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import time
+from enum import Enum, auto
 
 
 class ParserResult:
@@ -15,11 +16,12 @@ class ParserResult:
         self.message = None
         self.elapsedTime = 0
         self.result = None
+        self.status = None
         self.tipoDocumento = tipoDocumento
 
     def getParserResult(self):
         self.result = json.dumps({"tipoDocumento":self.tipoDocumento,"health":self.health,"message":self.message,
-                                 "config":self.config,"hash":self.hash,"status":"","elapsedTime":self.elapsedTime})
+                                 "config":self.config,"hash":self.hash,"status":self.status,"elapsedTime":self.elapsedTime})
         return self.result
 
 
@@ -39,6 +41,8 @@ class ParserResult:
         timeFinish = time.time()
         self.elapsedTime = timeFinish - timeStart
 
+    def setStatus(self, status):
+        self.status = status
 
 class ParserConfig:
     def __init__(self,file=None,enc='',csvSeparator=r';'):
@@ -86,3 +90,17 @@ class TipoDocumento:
 
     def getTipoDocumentoC2(self):
         return self.tipoDocumento_complemento2
+
+class ParserStatus(Enum):
+#               STATUS PADRAO PARA TODOS OS PARSERS
+    PARSED = auto()
+    ERROR = auto()
+    INVALID = auto()
+    INPROGRESS = auto()
+    ENCODING_ERROR = auto()
+    INVALID_TISS = auto()
+    EMPTY_DOCUMENT = auto()
+    ERRROR_RUNNING_REGEX = auto()
+    SCHEMA_TISS_DESCONHECIDO = auto()
+    VERSAO_TISS_DESCONHECIDA = auto()
+    ERROR_IDENTIFYING_OPERATOR = auto()
