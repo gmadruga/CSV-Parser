@@ -20,7 +20,7 @@ class UnisegurosDCM(AbstractPaser):
             #   CHECK DOCUMENTO SIMPLES SEM CRIAR DATAFRAME
             fileString = self.file.read_text(self.enc)
             if 'Unimed Seguros' in fileString:
-                print('Operadora encontrada: Unimed Seguros - DCM')
+                logger.debug('Operadora encontrada: Unimed Seguros - DCM')
                 return True
         except Exception as e:
             return False

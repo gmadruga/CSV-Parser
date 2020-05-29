@@ -25,6 +25,6 @@ class ParserFactory:
     ##      VERIFICANDO SE ARQUIVO ESTA VAZIO
         string = self.file.read_text()
         if not string:
-            raise EmptyDocumentException('Documento vazio')
+            raise EmptyDocumentException('Documento vazio: '+self.file.name)
         else:
-            raise TipoDocumentoNaoIdentificadoException('Erro ao identificar operadora')
+            raise TipoDocumentoNaoIdentificadoException('Erro ao identificar operadora: '+self.file.name)
