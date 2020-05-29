@@ -63,11 +63,9 @@ class AbstractPaser:
             return result
 
     def saveAndGetHash(self,finalDataframe):
-        buffer = StringIO()
-        finalDataframe.to_csv(buffer,index=True, sep=self.csvSeparator)
-        self.result.sethHash(self.getHash(buffer=buffer.getvalue(),hash_function='sha256'))
-        self.outPutFileName.write_text(data=buffer.getvalue(),encoding=self.enc)
-        buffer.close()
+        string = str(finalDataframe)
+        finalDataframe.to_csv(self.outPutFileName,index=True, sep=r';')
+        self.result.sethHash(self.getHash(string,hash_function='sha256'))
 
     def getHash(self,buffer,hash_function='sha1'):
         if hash_function == 'sha1':
@@ -78,4 +76,5 @@ class AbstractPaser:
         hash_str = base64.b64encode(h.digest()).decode('utf-8')
 
         return hash_str
+    
 
