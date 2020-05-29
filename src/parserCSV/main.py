@@ -10,7 +10,7 @@ from pathlib import Path
 from src.parserCSV.api import ParserAPI
 from src.utils import ParserConfig,ParserResult
 import pandas as pd
-
+from src.loggerConfig import logger
 #
 #           PEGANDO ARQUIVOS DE UM DIRETORIO TESTE
 #
@@ -20,12 +20,14 @@ filesToParse = []
 # Preenchendo lista de filesToParse
 for file in filepath.iterdir():
     if file.is_file() and file.suffix in ['.csv','.txt','.tsv']:
-        print('NOVO ARQUIVO PARA SER PARSEADO: '+file.name)
+        logger.debug('NOVO ARQUIVO PARA SER PARSEADO: '+file.name)
         filesToParse.append(file.absolute())
 
 if len(filesToParse)>0:
     parserResults = ParserAPI(filesToParse).runAll()
 else:
-    print('NÃO HÁ ARQUIVOS A SEREM PARSEADOS!!')
-    parserResults = None
+    logger.error('NÃO HÁ ARQUIVOS A SEREM PARSEADOS!!')
+    parserResults = ParserResult(config=None)
+logger.fatal
+
 

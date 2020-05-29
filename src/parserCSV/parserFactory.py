@@ -3,6 +3,7 @@ from src.utils import ParserConfig, EmptyDocumentException, TipoDocumentoNaoIden
 import src.parsers.dp
 import src.parsers.erp
 import src.parsers.rrg
+from src.loggerConfig import logger
 
 class ParserFactory:
     def __init__(self, file):
@@ -20,7 +21,7 @@ class ParserFactory:
                 bol = parser.checkDocumento()
                 if bol:
                     return parser
-        print('Operadora nao encontrada para ' + self.file.name)
+        logger.error('Operadora nao encontrada para ' + self.file.name)
     ##      VERIFICANDO SE ARQUIVO ESTA VAZIO
         string = self.file.read_text()
         if not string:

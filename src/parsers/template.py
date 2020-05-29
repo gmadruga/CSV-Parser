@@ -2,6 +2,7 @@ from io import StringIO
 
 import pandas as pd
 from src.utils import TipoDocumento
+from src.loggerConfig import logger
 
 from src.parserCSV.abstract import AbstractPaser
 
@@ -23,7 +24,7 @@ class TemplateDCM(AbstractPaser):
             fileString = self.file.read_text(self.enc)
             #   Condição para verificar presença de identificador único do doc dessa operadora
             if '' in fileString:
-                print('Operadora encontrada: <ic_operadora> - <tipo documento>')
+                logger.debug('Operadora encontrada: <ic_operadora> - <tipo documento>')
                 return True
         except Exception as e:
             return False

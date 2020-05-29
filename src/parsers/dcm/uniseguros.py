@@ -2,6 +2,7 @@ from io import StringIO
 
 import pandas as pd
 from src.utils import TipoDocumento
+from src.loggerConfig import logger
 
 from src.parserCSV.abstract import AbstractPaser
 
@@ -58,7 +59,7 @@ class UnisegurosDCM(AbstractPaser):
                                      )
 
     def _set_header(self):
-        print('Atribuindo cabecalho ao dataframe')
+        logger.debug('Atribuindo cabecalho ao dataframe')
         self.df.columns = ['Conta', 'Associado', 'Servico', 'Realizacao', 'Qtde',
                            'Val_Informado', 'Val_Glosado', 'Val_Aprovado', 'Glosa', 'Observacao']
         self.__remove_bad_lines()
@@ -68,14 +69,14 @@ class UnisegurosDCM(AbstractPaser):
         self.df['Total_Aprovado'] = self.header_df.iloc[3, 0].split(": ")[1]
         self.df['NR'] = self.header_df.iloc[4, 0].split(";")[0].split(": ")[1]
         self.df['Fatura'] = self.header_df.iloc[4, 0].split(";")[1].split(": ")[1]
-        print('Cabecalho atribuido ao dataframe com sucesso')
+        logger.debug('Cabecalho atribuido ao dataframe com sucesso')
 
     def __remove_bad_lines(self):
-        print('Entrando no metodo para remocao de possiveis linhas erradas')
+        logger.debug('Entrando no metodo para remocao de possiveis linhas erradas')
         try:
             self.df = self.df.replace(to_replace='None', value=pd.np.nan).dropna()
         except Exception:
-            print('Erro na remocao de linhas')
+            logger.error('Erro na remocao de linhas')
 
     def finalizeDF(self):
         self.final_df = self.df

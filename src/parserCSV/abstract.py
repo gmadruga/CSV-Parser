@@ -13,6 +13,7 @@ from multiprocessing.pool import ThreadPool
 from pathlib import Path
 import pandas as pd
 from src.utils import ParserResult, ParserConfig, TipoDocumento,ParserStatus
+from src.loggerConfig import logger
 import json
 
 class AbstractPaser:
@@ -40,7 +41,7 @@ class AbstractPaser:
         timeStart = time.time()
         self.outPutCsvFilePath = Path(str(self.file.parent)+'\\'+str(self.file.stem))
         self.outPutFileName = Path(str(self.file.parent)+'\\'+str(self.file.stem)+'\\'+str(self.file.stem)+'.csv')
-        print('Iniciando arquivo no diretorio de saida ' + str(self.outPutCsvFilePath))
+        logger.debug('Iniciando arquivo no diretorio de saida ' + str(self.outPutCsvFilePath))
         try:
             self.parseDocument()
             if not self.outPutCsvFilePath.exists():
@@ -51,7 +52,7 @@ class AbstractPaser:
             self.result.setElapsedTime(timeStart)
             self.result.setStatus(ParserStatus.PARSED)
             #-----------------------------------#
-            print('Arquivo parseado com sucesso!!')
+            logger.debug('Arquivo parseado com sucesso!!')
             result = self.result.getParserResult()
             return result
         except Exception as e:
