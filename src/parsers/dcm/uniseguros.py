@@ -29,9 +29,13 @@ class UnisegurosDCM(AbstractPaser):
         return TipoDocumento(("DEMONSTRATIVO_ANALISE_CONTA","000701",".csv/.txt/.tsv"))
 
     def parseDocument(self):
-        self.__read_csv()
-        self._set_header()
+        self.__read_csvTESTE()
+        #self.__read_csv()
+        #self._set_header()
         self.finalizeDF()
+
+    def __read_csvTESTE(self):
+        self.df = self.file.read_text(self.enc)
 
     def __read_csv(self):
         #               INICIALIZACAO DATAFRAME(S)
