@@ -65,6 +65,7 @@ class AbstractPaser:
     def saveAndGetHash(self,finalDataframe):
         if type(finalDataframe) is str:
             self.outPutFileName.write_text(finalDataframe,self.enc)
+            self.result.sethHash(self.getHash(finalDataframe, hash_function='sha256'))
         else:
             string = str(finalDataframe)
             finalDataframe.to_csv(self.outPutFileName,index=True, sep=r';')
