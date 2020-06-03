@@ -76,7 +76,7 @@ class AbstractPaser:
             h = hashlib.sha1()
         else:
             h = hashlib.sha256()
-        h.update(buffer.encode(encoding='utf-8'))
+        h.update(buffer.encode(encoding=self.enc))
         hash_str = base64.b64encode(h.digest()).decode('utf-8')
 
         return hash_str
