@@ -7,10 +7,10 @@ import time
 from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
-from src.parserCSV.api import ParserAPI
-from src.utils import ParserConfig,ParserResult
+from chalicelib.src.parserCSV.api import ParserAPI
+from chalicelib.src.utils import ParserConfig,ParserResult
 import pandas as pd
-from src.loggerConfig import logger
+from chalicelib.src.loggerConfig import logger
 #
 #           PEGANDO ARQUIVOS DE UM DIRETORIO TESTE
 #
