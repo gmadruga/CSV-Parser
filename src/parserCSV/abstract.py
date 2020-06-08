@@ -40,7 +40,7 @@ class AbstractPaser:
         #           CRIA DIRETORIO E ARQUIVO DE SAIDA
         timeStart = time.time()
         self.outPutCsvFilePath = Path(str(self.file.parent)+'\\'+str(self.file.stem))
-        self.outPutFileName = Path(str(self.file.parent)+'\\'+str(self.file.stem)+'\\'+str(self.file.stem)+'.csv')
+        self.outPutFileName = Path(str(self.outPutCsvFilePath)+'\\'+str(self.file.stem)+'.csv')
         logger.debug('Iniciando arquivo no diretorio de saida ' + str(self.outPutCsvFilePath))
         try:
             self.parseDocument()
