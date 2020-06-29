@@ -14,7 +14,7 @@ from chalicelib.src.loggerConfig import logger
 #
 #           PEGANDO ARQUIVOS DE UM DIRETORIO TESTE
 #
-filepath = Path('C:\\Users\\ianin\\Desktop\\IC\\PARSER\\testeParserCSV')
+filepath = Path('/home/gabriel/IC/CSVParserTestes')
 filesToParse = []
 
 # Preenchendo lista de filesToParse
@@ -25,6 +25,8 @@ for file in filepath.iterdir():
 
 if len(filesToParse)>0:
     parserResults = ParserAPI(filesToParse).runAll()
+
+    logger.debug('Thats all folks')
 else:
     logger.error('NÃO HÁ ARQUIVOS A SEREM PARSEADOS!!')
     parserResults = ParserResult(config=None)
