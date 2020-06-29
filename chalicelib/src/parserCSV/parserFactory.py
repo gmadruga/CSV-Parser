@@ -1,8 +1,5 @@
 from src.parsers.dcm.uniseguros import UnisegurosDCM
 from src.utils import ParserConfig, EmptyDocumentException, TipoDocumentoNaoIdentificadoException
-import src.parsers.dp
-import src.parsers.erp
-import src.parsers.rrg
 from src.loggerConfig import logger
 
 class ParserFactory:

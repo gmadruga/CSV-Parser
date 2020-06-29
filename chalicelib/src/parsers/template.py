@@ -1,10 +1,10 @@
 from io import StringIO
 
 import pandas as pd
-from src.utils import TipoDocumento
-from src.loggerConfig import logger
+from chalicelib.src.utils import TipoDocumento
+from chalicelib.src.loggerConfig import logger
 
-from src.parserCSV.abstract import AbstractPaser
+from chalicelib.src.parserCSV.abstract import AbstractPaser
 
 
 #       COLOCAR O NOME DA CLASSE CONFORME O NOME DO PARSER

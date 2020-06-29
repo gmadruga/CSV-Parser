@@ -1,14 +1,14 @@
-from src.parserCSV.parserFactory import ParserFactory
-from src.parserCSV.abstract import ParserResult, ParserConfig
-from src.utils import TipoDocumentoNaoIdentificadoException, EmptyDocumentException, ParserStatus
-from src.loggerConfig import logger
+from chalicelib.src.parserCSV.parserFactory import ParserFactory
+from chalicelib.src.parserCSV.abstract import ParserResult, ParserConfig
+from chalicelib.src.utils import TipoDocumentoNaoIdentificadoException, EmptyDocumentException, ParserStatus
+from chalicelib.src.loggerConfig import logger
 
 class ParserAPI:
 
     def __init__(self, filesToParse):
         self.filesToParse = filesToParse
 
-    def run(self,file):
+    def run(self, file):
         try:
             parser = ParserFactory(file).getConstructor()
             if parser is not None:
