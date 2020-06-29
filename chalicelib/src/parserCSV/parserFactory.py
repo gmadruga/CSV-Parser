@@ -1,6 +1,6 @@
-from src.parsers.dcm.uniseguros import UnisegurosDCM
-from src.utils import ParserConfig, EmptyDocumentException, TipoDocumentoNaoIdentificadoException
-from src.loggerConfig import logger
+from chalicelib.src.parsers.dcm.uniseguros import UnisegurosDCM
+from chalicelib.src.utils import ParserConfig, EmptyDocumentException, TipoDocumentoNaoIdentificadoException
+from chalicelib.src.loggerConfig import logger
 
 class ParserFactory:
     def __init__(self, file):

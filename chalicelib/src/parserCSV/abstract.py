@@ -14,7 +14,7 @@ from multiprocessing.pool import ThreadPool
 from pathlib import Path
 import pandas as pd
 
-from chalicelib.src.parserCSV.api import ParserAPI
+import chalicelib.src.parserCSV.api
 from chalicelib.src.utils import ParserResult, ParserConfig, TipoDocumento, ParserStatus
 from chalicelib.src.loggerConfig import logger
 import json
@@ -101,6 +101,8 @@ class ParserOperador:
         self.logger = logger
 
         self.__parse_request()
+        self.get_arquivo_s3()
+
 
         # Inicializa alguns atributos
 
@@ -133,10 +135,38 @@ class ParserOperador:
         try:
             # Recupera o objeto do S3
             s3 = boto3.resource('s3')
-            s3.Bucket(self.bucketArquivoOriginal).download_file(self.prefixoArquivoOriginal+self.arquivoOriginal,self.arquivoOriginal)
+            s3.Bucket(self.bucketArquivoOriginal).download_file(self.prefixoArquivoOriginal+self.arquivoOriginal,
+                                                                self.arquivoOriginal)
             self.logger.debug('Saindo do metodo getArquivoS3')
-            parserResults = ParserAPI([self.arquivoOriginal]).runAll()
-            return parserResults
+
+            parser_results = chalicelib.src.parserCSV.api.ParserAPI([self.arquivoOriginal]).runAll()
+
+
+
+            return parser_results;
         except Exception as e:
             self.logger.error('Erro ao obter arquivo original do S3')
         self.logger.debug('Saindo do metodo getArquivoS3')
+
+    def upload_file(arquivo, bucket, object_name=None):
+
+        """Upload a file to an S3 bucket
+
+        :param file_name: File to upload
+        :param bucket: Bucket to upload to
+        :param object_name: S3 object name. If not specified then file_name is used
+        :return: True if file was uploaded, else False
+        """
+
+        # If S3 object_name was not specified, use file_name
+        if object_name is None:
+            object_name = file_name
+
+        # Upload the file
+        s3_client = boto3.client('s3')
+        try:
+            response = s3_client.upload_file(file_name, bucket, object_name)
+        except ClientError as e:
+            logging.error(e)
+            return False
+        return True

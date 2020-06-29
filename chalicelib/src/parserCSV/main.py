@@ -14,7 +14,7 @@ from chalicelib.src.loggerConfig import logger
 #
 #           PEGANDO ARQUIVOS DE UM DIRETORIO TESTE
 #
-filepath = Path('/home/gabriel/IC/CSVParserTestes')
+filepath = Path('C://Users//Gabriel Madruga//Documents//ErrosParser//MerdaNow//NewParserCSV')
 filesToParse = []
 
 # Preenchendo lista de filesToParse
