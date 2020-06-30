@@ -4,7 +4,7 @@ import boto3
 from chalice import Chalice
 from chalice.app import SQSRecord
 from chalicelib.src.parserCSV.abstract import AbstractPaser
-from chalicelib.src.parserCSV.abstract import ParserOperador
+from chalicelib.src.parserCSV.abstract import ParserOperator
 S3 = boto3.client('s3', region_name='us-west-2')
 app = Chalice(app_name='testeapi')
 path = ''
@@ -18,7 +18,7 @@ def pathfinder(event):
     else:
         record = event
 
-    ParserOperador.__init__(record);
+    ParserOperator.__init__(record);
 
     return record
 

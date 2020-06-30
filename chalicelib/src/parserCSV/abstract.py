@@ -13,6 +13,7 @@ from io import StringIO
 from multiprocessing.pool import ThreadPool
 from pathlib import Path
 import pandas as pd
+from boto3.s3.inject import upload_file
 
 import chalicelib.src.parserCSV.api
 from chalicelib.src.utils import ParserResult, ParserConfig, TipoDocumento, ParserStatus
@@ -85,7 +86,7 @@ class AbstractPaser:
         return hash_str
 
 
-class ParserOperador:
+class ParserOperator:
 
     def __init__(self, request):
         self.dp_df = None
@@ -102,7 +103,7 @@ class ParserOperador:
 
         self.__parse_request()
         self.get_arquivo_s3()
-
+        self.upload_arquivo_s3()
 
         # Inicializa alguns atributos
 
@@ -125,11 +126,13 @@ class ParserOperador:
         self.arquivoOriginal = self.request['s3']['filename']
         self.versionIdArquivoOriginal = self.request['s3']['version_id']
 
-    def get_arquivo_s3(self) :
+
+    def get_arquivo_s3(self):
         """
-            Método utilizado para recuperar o arquivo csv a ser padronizado no S3
-            O arquivo recuperado do S3 é retornado como objeto StringIO
-            Dessa forma não há escrita em disco o que permite que a geração do dataframe seja mais rápida
+            Método utilizado para recuperar o arquivo csv a ser parseado no S3
+            O arquivo recuperado do S3 é retornado como arquivo
+            Dessa forma há escrita em disco o que, apesar de ser mais lento
+            comparado a escrever na memória, pode ser útil por questão de encoding.
         """
         self.logger.debug('Entrou no metodo getArquivoS3')
         try:
@@ -141,32 +144,24 @@ class ParserOperador:
 
             parser_results = chalicelib.src.parserCSV.api.ParserAPI([self.arquivoOriginal]).runAll()
 
-
-
             return parser_results;
         except Exception as e:
             self.logger.error('Erro ao obter arquivo original do S3')
         self.logger.debug('Saindo do metodo getArquivoS3')
 
-    def upload_file(arquivo, bucket, object_name=None):
-
-        """Upload a file to an S3 bucket
-
-        :param file_name: File to upload
-        :param bucket: Bucket to upload to
-        :param object_name: S3 object name. If not specified then file_name is used
-        :return: True if file was uploaded, else False
+    def upload_arquivo_s3(self):
+        """
+        Método utilizado para subir o arquivo parseado no s3 e enviar
+        a mensagem para o SQSpadronizador.
         """
 
-        # If S3 object_name was not specified, use file_name
-        if object_name is None:
-            object_name = file_name
+        self.logger.debug('Entrando no metodo uploadArquivoS3')
 
-        # Upload the file
-        s3_client = boto3.client('s3')
         try:
-            response = s3_client.upload_file(file_name, bucket, object_name)
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
+            upload_file(self.arquivoOriginal, "Parseado-Teste/" + self.prefixoArquivoOriginal + self.arquivoOriginal)
+            self.logger.debug("Upload realizado com sucesso !")
+            return
+        except Exception as e:
+            self.logger.error("Erro ao fazer o upload do arquivo parseado no s3")
+        self.logger.debug("Saindo do metodo uploadArquivoS3")
+
